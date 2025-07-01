@@ -31,8 +31,8 @@
 - - Using Vault as a CA makes rotation and role mapping easy
 - Minimal Attack Surface
 - - Vault auth over Mutual TLS
-- -Tight identity binding to device + user
-- -Auth wrapper (will be) signed as a binary, minimizing tampering risk
+- - Tight identity binding to device + user
+- - Auth wrapper (will be) signed as a binary, minimizing tampering risk
 ->Control over the entire trust chain
 
 ## Next steps: 
@@ -59,5 +59,5 @@ myvault -h
 myvault fingerprint
 myvault rotate
 ```
-Fingerprint: Uses the stored cert in your keychain to log into vault
-Rotate: Stores/rotates a cert from vault into your keychain
+- Fingerprint: Uses the stored cert in your keychain to log into vault
+- Rotate: Stores/rotates a cert from vault into your keychain
