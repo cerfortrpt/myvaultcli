@@ -18,6 +18,7 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+hookspath=['./hooks'],
 pyz = PYZ(a.pure)
 
 exe = EXE(
