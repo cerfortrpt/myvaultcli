@@ -31,6 +31,7 @@ jobs:
           pyinstaller --clean --log-level=DEBUG main.spec
           cp dist/main vaultfingerprint
           chmod +x vaultfingerprint
+          file vaultfingerprint
 
       - name: Generate SHA256
         id: hash
