@@ -49,6 +49,11 @@ jobs:
       - name: 🔐 Compute SHA256 checksum
         run: shasum -a 256 dist/main > dist/vaultfingerprint.sha256
 
+      - name: 🔍 Verify GitHub token
+        run: >
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases
+
+
       - name: 🚀 Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
