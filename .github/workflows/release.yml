@@ -57,7 +57,7 @@ jobs:
       - name: 🚀 Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          overwrite: true
+          prerelease: true
           files: |
             dist/main
             dist/vaultfingerprint.sha256
