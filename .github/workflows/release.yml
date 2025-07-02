@@ -6,6 +6,7 @@ on:
       - "v*"
 
       #potentially add signig in at some point
+      #just can't verify lacontext localauthentication import
 jobs:
   release:
     name: Build and Release
@@ -29,8 +30,9 @@ jobs:
       - name: Build binary with PyInstaller
         run: |
           pyinstaller --clean --log-level=DEBUG main.spec
-          find dist/main -iname '*localauthentication*' -print
-          tree dist/main || ls -R dist/main
+          find dist/main -iname '*LocalAuthentication*' -print
+          echo "🔍 Checking for LocalAuthentication in dist/main..."
+          find dist/main -iname '*LocalAuthentication*' -print || echo "❌ Not bundled"
           cp dist/main vaultfingerprint
           chmod +x vaultfingerprint
           file vaultfingerprint
@@ -69,3 +71,6 @@ jobs:
           git commit -am "Update to ${{ github.ref_name }}"
           git push origin main
 
+
+
+          
