@@ -39,6 +39,9 @@ jobs:
       - name: 🧪 Run tests (optional)
         run: pytest tests/ || echo "no tests yet"
 
+      - name: Install python dependencies
+        run: pip install -r requirements.txt
+
       - name: 🏗️ Build CLI binary
         run: pyinstaller --onefile scripts/vault_fingerprint.py --name vaultfingerprint
 
