@@ -18,14 +18,29 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 🏷️ Inject version from Git tag
-        run: python build.py
+      - name: 🐞 Debug build.py location and execution
+        run: |
+          echo "WORKSPACE: ${{ github.workspace }}"
+          echo "PWD: $(pwd)"
+          echo "Listing contents:"
+          ls -al
+          echo "---"
+          echo "Checking for build.py..."
+          if [ -f build.py ]; then
+          echo "✅ build.py found. Running it..."
+          python build.py
+          else
+          echo "❌ build.py NOT found!"
+          find . -name "build.py"
+          exit 1
+          fi
+
 
       - name: 🧪 Run tests (optional)
         run: pytest tests/ || echo "no tests yet"
 
       - name: 🏗️ Build CLI binary
-        run: pyinstaller --onefile myvaultcli/scripts/vault_fingerprint.py --name vaultfingerprint
+        run: pyinstaller --onefile scripts/vault_fingerprint.py --name vaultfingerprint
 
       - name: 🔐 Compute SHA256 checksum
         run: shasum -a 256 dist/vaultfingerprint > dist/vaultfingerprint.sha256
