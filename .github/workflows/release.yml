@@ -52,7 +52,7 @@ jobs:
           BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/vaultfingerprint"
           SHA256="${{ steps.hash.outputs.sha256 }}"
 
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cerfortrpt/homebrew-tools taprepo
+          git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
           cd taprepo
 
           sed -i '' "s|url \".*\"|url \"$BINARY_URL\"|" $FORMULA_PATH
