@@ -1,65 +1,65 @@
-name: Build & Release vaultfingerprint
+name: Release Python CLI and Update Homebrew Formula
 
 on:
   push:
     tags:
-      - 'v*'  # Trigger only on version tags like v0.3.0
+      - "v*"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  release:
+    name: Build and Release
+    runs-on: macos-latest
 
     steps:
-      - name: 📥 Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: 🐞 Debug build.py location and execution
+      - name: Install dependencies
         run: |
-          echo "WORKSPACE: ${{ github.workspace }}"
-          echo "PWD: $(pwd)"
-          echo "Listing contents:"
-          ls -al
-          echo "---"
-          echo "Checking for build.py..."
-          if [ -f build.py ]; then
-          echo "✅ build.py found. Running it..."
-          python build.py
-          else
-          echo "❌ build.py NOT found!"
-          find . -name "build.py"
-          exit 1
-          fi
+          python -m pip install --upgrade pip
+          pip install pyinstaller keyring cryptography
 
+      - name: Build binary with PyInstaller
+        run: |
+          pyinstaller main.spec
+          cp dist/main vaultfingerprint
+          chmod +x vaultfingerprint
 
-      - name: 🧪 Run tests (optional)
-        run: pytest tests/ || echo "no tests yet"
+      - name: Generate SHA256
+        id: hash
+        run: |
+          sha256=$(shasum -a 256 vaultfingerprint | awk '{print $1}')
+          echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
 
-      - name: Install python dependencies
-        run: pip install -r requirements.txt
-
-        # for now i have a local main.spec file that is good
-      # - name: 🏗️ Build CLI binary
-      #   run: pyinstaller --onefile scripts/vault_fingerprint.py --name vaultfingerprint
-
-      - name: 🔐 Compute SHA256 checksum
-        run: shasum -a 256 dist/main > dist/vaultfingerprint.sha256
-
-      - name: 🔍 Verify GitHub token
-        run: >
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases
-
-
-      - name: 🚀 Upload to GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          prerelease: true
-          files: |
-            dist/main
-            dist/vaultfingerprint.sha256
+          files: vaultfingerprint
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: "Automated release for version ${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Homebrew Formula
+        run: |
+          FORMULA_PATH="Formula/myvault.rb"
+          BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/vaultfingerprint"
+          SHA256="${{ steps.hash.outputs.sha256 }}"
+
+          git clone https://x-access-token:${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}@github.com/${{ secrets.HOMEBREW_TAP_REPO }} taprepo
+          cd taprepo
+
+          sed -i '' "s|url \".*\"|url \"$BINARY_URL\"|" $FORMULA_PATH
+          sed -i '' "s|sha256 \".*\"|sha256 \"$SHA256\"|" $FORMULA_PATH
+          sed -i '' "s|version \".*\"|version \"${{ github.ref_name }}\"|" $FORMULA_PATH || echo "version \"${{ github.ref_name }}\"" >> $FORMULA_PATH
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Update to ${{ github.ref_name }}"
+          git push origin main
