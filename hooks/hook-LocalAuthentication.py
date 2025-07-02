@@ -1,4 +1,3 @@
-# hook-LocalAuthentication.py
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_all
 
-hiddenimports = collect_submodules('LocalAuthentication')
+datas, binaries, hiddenimports = collect_all('LocalAuthentication')
