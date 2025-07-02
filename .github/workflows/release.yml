@@ -18,9 +18,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 📦 Install requirements
-        run: pip install -r requirements.txt
-
       - name: 🏷️ Inject version from Git tag
         run: python build.py
 
