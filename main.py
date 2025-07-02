@@ -3,7 +3,9 @@ import importlib.util
 import os
 import sys
 
-BASE_DIR = getattr(sys, 'frozen', False) and sys._MEIPASS or os.path.dirname(__file__)
+from scripts.version import __version__
+
+BASE_DIR = getattr(sys, 'frozen', False) and sys._MEIPASS or os.path.dirname(os.path.abspath(__file__))
 
 def import_script(script_name):
     script_path = os.path.join(BASE_DIR, "scripts", f"{script_name}.py")
@@ -14,13 +16,20 @@ def import_script(script_name):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["fingerprint", "rotate"])
+    parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version"])
+    parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
 
     if args.command == "fingerprint":
         import_script("vault_fingerprint").main()
     elif args.command == "rotate":
         import_script("vault_rotate_cert").main()
+    elif args.command == "clean":
+        import_script("clean").main()
+    elif args.command == "status":
+        import_script("status").main()
+    elif args.command == "version":
+        print(f"myvault CLI version {__version__}")
 
 if __name__ == "__main__":
     main()
