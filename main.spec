@@ -11,7 +11,7 @@ a = Analysis(
         'cryptography.x509',
         'cryptography.x509.name',
         'cryptography.x509.oid'],
-    hookspath=[],
+    hookspath=['./hooks'],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
