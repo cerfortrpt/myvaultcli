@@ -29,6 +29,7 @@ jobs:
       - name: Build binary with PyInstaller
         run: |
           pyinstaller --clean --log-level=DEBUG main.spec
+          find dist/main -name '*LocalAuthentication*' || echo "Not bundled"
           cp dist/main vaultfingerprint
           chmod +x vaultfingerprint
           file vaultfingerprint
