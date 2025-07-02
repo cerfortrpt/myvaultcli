@@ -1,0 +1,4 @@
+pyinstaller
+keyring
+cryptography
+pyobjc
