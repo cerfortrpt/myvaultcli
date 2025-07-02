@@ -42,17 +42,18 @@ jobs:
       - name: Install python dependencies
         run: pip install -r requirements.txt
 
-      - name: 🏗️ Build CLI binary
-        run: pyinstaller --onefile scripts/vault_fingerprint.py --name vaultfingerprint
+        # for now i have a local main.spec file that is good
+      # - name: 🏗️ Build CLI binary
+      #   run: pyinstaller --onefile scripts/vault_fingerprint.py --name vaultfingerprint
 
       - name: 🔐 Compute SHA256 checksum
-        run: shasum -a 256 dist/vaultfingerprint > dist/vaultfingerprint.sha256
+        run: shasum -a 256 dist/main > dist/vaultfingerprint.sha256
 
       - name: 🚀 Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/vaultfingerprint
+            dist/main
             dist/vaultfingerprint.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
