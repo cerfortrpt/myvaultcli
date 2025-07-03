@@ -4,6 +4,7 @@ import os
 import sys
 import hashlib
 import urllib.request
+import subprocess
 
 from scripts.version import __version__
 
@@ -23,17 +24,21 @@ def get_sha256(filepath):
         return None
 
 def fetch_expected_sha():
-
     version = __version__  # Optional: parse from your app version
     url = f"https://github.com/cerfortrpt/myvaultcli/releases/download/{version}/main.sha256"
-    print("Getting hash from url " +url)
-    # Or to always use latest:
-    # url = "https://github.com/cerfortrpt/vaultfingerprint/releases/latest/download/main.sha256"
+    print("Getting hash from url " + url)
+
     try:
-        with urllib.request.urlopen(url, timeout=5) as response:
-            return response.read().decode("utf-8").strip()
-    except Exception as e:
-        print(f"Could not fetch expected SHA256: {e}")
+        result = subprocess.run(
+            ["curl", "-sL", url],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            text=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Could not fetch expected SHA256: {e.stderr.strip()}")
         return None
 
 def enforce_self_integrity():

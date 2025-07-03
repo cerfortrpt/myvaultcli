@@ -69,7 +69,7 @@ jobs:
         run: |
           FORMULA_PATH="Formula/myvault.rb"
           BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/main"
-          
+          curl -sL https://github.com/cerfortrpt/myvaultcli/releases/download/v0.3.48/main.sha256
           SHA256="${{ steps.hash.outputs.sha256 }}"
 
           git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
