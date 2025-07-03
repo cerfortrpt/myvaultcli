@@ -3,11 +3,11 @@ import importlib.util
 import os
 import sys
 import hashlib
+import urllib.request
 
 from scripts.version import __version__
 
 BASE_DIR = getattr(sys, 'frozen', False) and sys._MEIPASS or os.path.dirname(os.path.abspath(__file__))
-
 
 
 
@@ -22,18 +22,21 @@ def get_sha256(filepath):
         print(f"Error computing hash for {filepath}: {e}")
         return None
 
-def read_expected_sha256():
-    base_path = os.path.dirname(get_self_path())
-    sha_file = os.path.join(base_path, "main.sha256")
+def fetch_expected_sha():
+
+    version = __version__  # Optional: parse from your app version
+    url = f"https://github.com/cerfortrpt/vaultfingerprint/releases/download/{version}/main.sha256"
+    # Or to always use latest:
+    # url = "https://github.com/cerfortrpt/vaultfingerprint/releases/latest/download/main.sha256"
     try:
-        with open(sha_file, "r") as f:
-            return f.read().strip()
+        with urllib.request.urlopen(url, timeout=5) as response:
+            return response.read().decode("utf-8").strip()
     except Exception as e:
-        print(f"Could not read expected SHA256 file: {e}")
+        print(f"Could not fetch expected SHA256: {e}")
         return None
 
 def enforce_self_integrity():
-    expected = read_expected_sha256()
+    expected = fetch_expected_sha()
     actual = get_sha256(get_self_path())
     if not expected or not actual:
         print("❌ Integrity check failed (missing or unreadable hash).")
