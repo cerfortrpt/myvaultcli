@@ -5,7 +5,7 @@ import os
 import traceback
 import tempfile
 import sys
-from LocalAuthentication import LAContext
+import LocalAuthentication
 import objc
 
 # Constants
@@ -17,7 +17,7 @@ def exit_with_error(message, code=1):
     sys.exit(code)
 
 def authenticate_with_fingerprint():
-    context = LAContext.alloc().init()
+    context = LocalAuthentication.LAContext.alloc().init()
     ok, _ = context.canEvaluatePolicy_error_(LAPolicyDeviceOwnerAuthenticationWithBiometrics, None)
 
     if not ok:
