@@ -48,11 +48,14 @@ jobs:
         run: |
           sha256=$(shasum -a 256 dist/main | awk '{print $1}')
           echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
+          shasum -a 256 dist/main | awk '{print $1}' > dist/main.sha256
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/main
+          files: |
+            dist/main
+            dist/main.sha256
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           body: "Automated release for version ${{ github.ref_name }}"
