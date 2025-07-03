@@ -9,7 +9,7 @@ import urllib.request
 from datetime import datetime
 import json
 
-from version import __version__ # Inject this during build or tag parsing if needed
+from scripts.version import __version__ # Inject this during build or tag parsing if needed
 
 def check_env_var(var):
     value = os.environ.get(var)
@@ -108,6 +108,8 @@ def run_diagnostics():
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
     else:
         print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
+        print_status(__version__)
+        print("latest is " + latest)
 
     sha = get_self_hash()
     print_status("Binary SHA256", sha is not None, sha or "")
