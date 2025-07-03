@@ -25,7 +25,8 @@ def get_sha256(filepath):
 def fetch_expected_sha():
 
     version = __version__  # Optional: parse from your app version
-    url = f"https://github.com/cerfortrpt/vaultfingerprint/releases/download/{version}/main.sha256"
+    url = f"https://github.com/cerfortrpt/myvaultcli/releases/download/{version}/main.sha256"
+    print("Getting hash from url " +url)
     # Or to always use latest:
     # url = "https://github.com/cerfortrpt/vaultfingerprint/releases/latest/download/main.sha256"
     try:
