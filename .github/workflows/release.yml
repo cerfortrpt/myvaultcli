@@ -27,6 +27,9 @@ jobs:
           pip install pyinstaller keyring cryptography pyobjc pyobjc-framework-LocalAuthentication
           pip install -r requirements.txt
 
+      - name: Set version
+        run: python build.py
+
       - name: Build binary with PyInstaller
         run: |
           pyinstaller --clean --log-level=DEBUG main.spec
