@@ -7,6 +7,7 @@ import subprocess
 import hashlib
 import urllib.request
 from datetime import datetime
+import json
 
 from scripts.version import __version__ # Inject this during build or tag parsing if needed
 
@@ -18,6 +19,24 @@ def check_network_reachability(host, port=443, timeout=3):
     try:
         socket.create_connection((host, port), timeout=timeout)
         return True
+    except Exception:
+        return False
+
+
+def fetch_latest_release_version():
+    try:
+        url = "https://api.github.com/repos/cerfortrpt/myvaultcli/releases/latest"
+        with urllib.request.urlopen(url, timeout=5) as response:
+            data = json.loads(response.read())
+            return data["tag_name"].lstrip("v")  # e.g. "0.3.45"
+    except Exception as e:
+        return None
+
+def is_latest_version(current, latest):
+    def normalize(v):
+        return [int(p) for p in v.split(".")]
+    try:
+        return normalize(current) >= normalize(latest)
     except Exception:
         return False
 
@@ -72,7 +91,12 @@ def run_diagnostics():
 
     print_status("Python", True, f"{platform.python_version()} (PyInstaller: {'Yes' if getattr(sys, 'frozen', False) else 'No'})")
 
-    print_status("CLI Version", True, f"{__version__}")
+    latest = fetch_latest_release_version()
+    if latest:
+        up_to_date = is_latest_version(__version__, latest)
+        print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
+    else:
+        print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
 
     sha = get_self_hash()
     print_status("Binary SHA256", sha is not None, sha or "")
