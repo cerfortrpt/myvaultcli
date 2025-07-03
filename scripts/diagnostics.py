@@ -42,14 +42,6 @@ def fetch_latest_release_version():
         return None
 
 
-def is_latest_version(current, latest):
-    def normalize(v):
-        return [int(p) for p in v.split(".")]
-    try:
-        return normalize(current) >= normalize(latest)
-    except Exception:
-        return False
-
 def check_touch_id_available():
     try:
         import LocalAuthentication  # bundled via pyobjc
@@ -104,7 +96,13 @@ def run_diagnostics():
 
     latest = "v" + str(fetch_latest_release_version())
     if latest:
-        up_to_date = is_latest_version(__version__, latest)
+        if latest==__version__:
+            up_to_date=True
+        else:
+            print(latest)
+            print(__version__)
+            up_to_date=False
+
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
     else:
         print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
