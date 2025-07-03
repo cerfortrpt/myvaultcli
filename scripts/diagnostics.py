@@ -29,12 +29,16 @@ import json
 
 def fetch_latest_release_version():
     try:
-        url = "https://api.github.com/repos/cerfortrpt/myvaultcli/releases/latest"
-        with urllib.request.urlopen(url, timeout=5) as response:
-            data = json.loads(response.read())
-            tag = data.get("tag_name", "")  # e.g. "v0.4.5"
-            return tag.lstrip("v")  # Remove "v" prefix
-    except Exception:
+        result = subprocess.run(
+            ["gh", "release", "view", "--repo", "cerfortrpt/myvaultcli", "--json", "tagName", "-q", ".tagName"],
+            capture_output=True,
+            check=True,
+            text=True
+        )
+        tag = result.stdout.strip()
+        return tag.lstrip("v")
+    except Exception as e:
+        print(f"Failed to fetch latest version via GitHub CLI: {e}")
         return None
 
 
@@ -99,6 +103,8 @@ def run_diagnostics():
 
 
     latest = fetch_latest_release_version()
+    print(fetch_latest_release_version)
+    print(latest)
     if latest:
         up_to_date = is_latest_version(__version__, latest)
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
