@@ -108,7 +108,7 @@ def run_diagnostics():
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
     else:
         print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
-        print_status(__version__)
+        print(__version__)
         print("latest is " + latest)
 
     sha = get_self_hash()
