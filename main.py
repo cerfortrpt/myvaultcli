@@ -70,7 +70,7 @@ def main():
     enforce_self_integrity()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version", "verify"])
+    parser.add_argument("command", choices=["diagnose","fingerprint", "rotate", "status", "clean", "version", "verify"])
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
 
@@ -87,6 +87,8 @@ def main():
         print(f"myvault CLI version {__version__}")
     elif args.command == "verify":
         enforce_self_integrity()
+    elif args.command == "diagnose":
+        import_script("diagnostics").main()
     
 if __name__ == "__main__":
     main()
