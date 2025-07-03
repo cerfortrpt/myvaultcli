@@ -102,9 +102,7 @@ def run_diagnostics():
     print_status("Python", True, f"{platform.python_version()} (PyInstaller: {'Yes' if getattr(sys, 'frozen', False) else 'No'})")
 
 
-    latest = fetch_latest_release_version()
-    print(fetch_latest_release_version)
-    print(latest)
+    latest = "v" + str(fetch_latest_release_version())
     if latest:
         up_to_date = is_latest_version(__version__, latest)
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
