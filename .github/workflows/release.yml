@@ -32,27 +32,27 @@ jobs:
           pyinstaller --clean --log-level=DEBUG main.spec
           find dist/main -iname '*LocalAuthentication*' -print || echo "❌ LocalAuthentication not bundled"
           rm vaultfingerprint
-          cp dist/main vaultfingerprint
-          chmod +x vaultfingerprint
-          file vaultfingerprint
+          ls
+          chmod +x dist/main
+          file dist/main
 
 
       - name: Test binary for LocalAuthentication import
         run: |
           echo "Testing LocalAuthentication import in compiled binary..."
-          ./vaultfingerprint --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
+          ./dist/main --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
 
 
       - name: Generate SHA256
         id: hash
         run: |
-          sha256=$(shasum -a 256 vaultfingerprint | awk '{print $1}')
+          sha256=$(shasum -a 256 dist/main | awk '{print $1}')
           echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: vaultfingerprint
+          files: dist/main
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           body: "Automated release for version ${{ github.ref_name }}"
@@ -62,7 +62,7 @@ jobs:
       - name: Update Homebrew Formula
         run: |
           FORMULA_PATH="Formula/myvault.rb"
-          BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/vaultfingerprint"
+          BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/dist/main"
           SHA256="${{ steps.hash.outputs.sha256 }}"
 
           git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
