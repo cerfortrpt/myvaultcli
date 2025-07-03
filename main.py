@@ -45,14 +45,14 @@ def enforce_self_integrity():
     expected = fetch_expected_sha()
     actual = get_sha256(get_self_path())
     if not expected or not actual:
-        print("❌ Integrity check failed (missing or unreadable hash).")
+        print("Integrity check failed (missing or unreadable hash).")
         sys.exit(1)
     if expected != actual:
-        print("❌ Integrity check failed! The binary may have been tampered with.")
+        print("Integrity check failed! The binary may have been tampered with.")
         print(f"Expected: {expected}\nActual:   {actual}")
         sys.exit(1)
     else:
-        print("✅ Self-integrity check passed.")
+        print("Self-integrity check passed.")
 
 
 

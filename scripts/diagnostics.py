@@ -71,7 +71,7 @@ def check_vault_reachable():
         return False
 
 def print_status(label, ok, info=""):
-    status = "✅ OK" if ok else "❌ FAIL"
+    status = "OK" if ok else "FAIL"
     print(f"{label:<25} {status} {info}")
 
 def run_diagnostics():
@@ -103,7 +103,7 @@ def run_diagnostics():
             print(__version__)
             up_to_date=False
 
-        print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
+        print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest}, run myvault upgrade to install)")
     else:
         print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
 
@@ -111,7 +111,7 @@ def run_diagnostics():
     sha = get_self_hash()
     print_status("Binary SHA256", sha is not None, sha or "")
 
-    print("\n🧪 Diagnostic complete.\n")
+    print("\n Diagnostic complete.\n")
 
 def main():
     run_diagnostics()

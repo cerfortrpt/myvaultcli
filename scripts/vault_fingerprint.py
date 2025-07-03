@@ -13,7 +13,7 @@ LAPolicyDeviceOwnerAuthenticationWithBiometrics = 1
 VAULT_ADDR = os.environ.get("VAULT_ADDR")
 
 def exit_with_error(message, code=1):
-    print(f"❌ ERROR: {message}", file=sys.stderr)
+    print(f"ERROR: {message}", file=sys.stderr)
     sys.exit(code)
 
 def authenticate_with_fingerprint():
@@ -23,7 +23,7 @@ def authenticate_with_fingerprint():
     if not ok:
         exit_with_error("Touch ID is not available on this device.")
 
-    print("🔐 Touch ID authentication required...")
+    print("Touch ID authentication required...")
 
     done = threading.Event()
     result = {"success": False}
@@ -41,7 +41,7 @@ def authenticate_with_fingerprint():
     done.wait()
 
     if result["success"]:
-        print("✅ Fingerprint accepted.")
+        print("Fingerprint accepted.")
     else:
         exit_with_error("Fingerprint authentication failed.")
 
@@ -89,7 +89,7 @@ def vault_token_login(cert, key):
         if token_result.returncode != 0:
             exit_with_error(f"Vault token lookup failed: {token_result.stderr.strip()}")
 
-        print("✅ Vault token login successful.")
+        print("Vault token login successful.")
 
     except FileNotFoundError:
         exit_with_error("Vault CLI not found. Ensure it's installed and in your PATH.")

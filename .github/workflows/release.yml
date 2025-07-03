@@ -33,7 +33,7 @@ jobs:
       - name: Build binary with PyInstaller
         run: |
           pyinstaller --clean --log-level=DEBUG main.spec
-          find dist/main -iname '*LocalAuthentication*' -print || echo "❌ LocalAuthentication not bundled"
+          find dist/main -iname '*LocalAuthentication*' -print || echo "LocalAuthentication not bundled"
           rm vaultfingerprint
           ls
           chmod +x dist/main
@@ -43,7 +43,7 @@ jobs:
       # - name: Test binary for LocalAuthentication import
       #   run: |
       #     echo "Testing LocalAuthentication import in compiled binary..."
-      #     ./dist/main --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
+      #     ./dist/main --diagnose-local-auth || echo "Failed to import LocalAuthentication"
       #     ./dist/main diagnose-local-auth
 
       - name: Generate SHA256
@@ -75,10 +75,10 @@ jobs:
           echo "Fetching SHA256 from: $SHA_URL"
           SHA256=$(curl -sL $SHA_URL)
           if [ -z "$SHA256" ]; then
-            echo "❌ Failed to fetch SHA256 from $SHA_URL"
+            echo "Failed to fetch SHA256 from $SHA_URL"
             exit 1
           fi
-          echo "✅ Got SHA: $SHA256"
+          echo "Got SHA: $SHA256"
 
           git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
           cd taprepo

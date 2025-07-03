@@ -16,7 +16,7 @@ VAULT_CA_PATH = f"pki/issue/{ROLE}"
 CERT_AUTH_PATH = f"auth/cert/certs/{ROLE}"
 
 def exit_with_error(message, code=1):
-    print(f"❌ ERROR: {message}", file=sys.stderr)
+    print(f"ERROR: {message}", file=sys.stderr)
     sys.exit(code)
 
 def main():
@@ -64,7 +64,7 @@ def main():
     except subprocess.CalledProcessError as e:
         exit_with_error(f"Failed to register cert with Vault: {e.stderr.strip()}")
 
-    print("🧠 Storing certificate in macOS Keychain...")
+    print("Storing certificate in macOS Keychain...")
 
     try:
         keyring.set_password("vault_cert_auth", "cert", cert)
@@ -72,7 +72,7 @@ def main():
     except Exception as e:
         exit_with_error(f"Failed to store credentials in Keychain: {e}")
 
-    print("✅ Certificate successfully stored and registered.")
+    print("Certificate successfully stored and registered.")
 
 if __name__ == "__main__":
     main()
