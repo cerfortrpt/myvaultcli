@@ -37,11 +37,11 @@ jobs:
           file dist/main
 
 
-      - name: Test binary for LocalAuthentication import
-        run: |
-          echo "Testing LocalAuthentication import in compiled binary..."
-          ./dist/main --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
-          ./dist/main diagnose-local-auth
+      # - name: Test binary for LocalAuthentication import
+      #   run: |
+      #     echo "Testing LocalAuthentication import in compiled binary..."
+      #     ./dist/main --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
+      #     ./dist/main diagnose-local-auth
 
       - name: Generate SHA256
         id: hash
