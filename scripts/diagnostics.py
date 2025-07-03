@@ -32,14 +32,9 @@ def fetch_latest_release_version():
         url = "https://api.github.com/repos/cerfortrpt/myvaultcli/releases/latest"
         with urllib.request.urlopen(url, timeout=5) as response:
             data = json.loads(response.read())
-            body = data.get("body", "")
-            # Match version string like v0.4.5 in release body
-            match = re.search(r"version v?(\d+\.\d+\.\d+)", body, re.IGNORECASE)
-            if match:
-                return match.group(1)
-            else:
-                return None
-    except Exception as e:
+            tag = data.get("tag_name", "")  # e.g. "v0.4.5"
+            return tag.lstrip("v")  # Remove "v" prefix
+    except Exception:
         return None
 
 
@@ -102,14 +97,14 @@ def run_diagnostics():
 
     print_status("Python", True, f"{platform.python_version()} (PyInstaller: {'Yes' if getattr(sys, 'frozen', False) else 'No'})")
 
+
     latest = fetch_latest_release_version()
     if latest:
         up_to_date = is_latest_version(__version__, latest)
         print_status("CLI Version", up_to_date, f"{__version__} (latest: {latest})")
     else:
         print_status("CLI Version", True, f"{__version__} (could not fetch latest)")
-        print(__version__)
-        print("latest is " + latest)
+
 
     sha = get_self_hash()
     print_status("Binary SHA256", sha is not None, sha or "")
