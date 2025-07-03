@@ -17,19 +17,26 @@ def import_script(script_name):
 def main():
 
 
+    if "--diagnose-local-auth" in sys.argv:
+        try:
+            import LocalAuthentication
+            print("✅ LocalAuthentication imported successfully!")
+        except Exception as e:
+            print(f"❌ LocalAuthentication import failed: {type(e).__name__}: {e}")
+        return
+
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["--diagnose-local-auth","fingerprint", "rotate", "status", "clean", "version"])
+    parser.add_argument("command", choices=["diagnose-local-auth","fingerprint", "rotate", "status", "clean", "version"])
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
 
 
     if args.command == "fingerprint":
         import_script("vault_fingerprint").main()
-    elif args.command=="--diagnose-local-auth":
-        import LocalAuthentication
-        print("Local auth imported successfully")
-        from LocalAuthentication import LAContext
-        print("LA context imported")
+    elif args.command=="diagnose-local-auth":
+        print("testing lacontext")
+        import_script("test_lacontext")
     elif args.command == "rotate":
         import_script("vault_rotate_cert").main()
     elif args.command == "clean":
