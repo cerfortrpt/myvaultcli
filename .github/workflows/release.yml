@@ -35,6 +35,13 @@ jobs:
           chmod +x vaultfingerprint
           file vaultfingerprint
 
+
+      - name: Test binary for LocalAuthentication import
+        run: |
+          echo "Testing LocalAuthentication import in compiled binary..."
+          ./vaultfingerprint --diagnose-local-auth || echo "❌ Failed to import LocalAuthentication"
+
+
       - name: Generate SHA256
         id: hash
         run: |

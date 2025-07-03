@@ -15,10 +15,22 @@ def import_script(script_name):
     return module
 
 def main():
+
+    if "--diagnose-local-auth" in sys.argv:
+        print("[Diagnostic] Testing import of LocalAuthentication...")
+        try:
+            import LocalAuthentication
+            print("✅ LocalAuthentication imported successfully!")
+        except Exception as e:
+            print(f"❌ LocalAuthentication import failed: {type(e).__name__}: {e}")
+        return
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version"])
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
+
 
     if args.command == "fingerprint":
         import_script("vault_fingerprint").main()
