@@ -63,10 +63,15 @@ jobs:
         run: |
           FORMULA_PATH="Formula/myvault.rb"
           BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/dist/main"
+          
           SHA256="${{ steps.hash.outputs.sha256 }}"
 
           git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
           cd taprepo
+          ls
+          cat scripts/vault_fingerprint.py
+          ./dist/main diagnose-local-auth
+          ./dist/main fingerprint
 
           sed -i '' "s|url \".*\"|url \"$BINARY_URL\"|" $FORMULA_PATH
           sed -i '' "s|sha256 \".*\"|sha256 \"$SHA256\"|" $FORMULA_PATH
