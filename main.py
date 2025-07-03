@@ -17,7 +17,7 @@ def import_script(script_name):
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["diagnose-local-auth","fingerprint", "rotate", "status", "clean", "version"])
+    parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version"])
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
 
