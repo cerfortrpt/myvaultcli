@@ -23,14 +23,25 @@ def check_network_reachability(host, port=443, timeout=3):
         return False
 
 
+import re
+import urllib.request
+import json
+
 def fetch_latest_release_version():
     try:
         url = "https://api.github.com/repos/cerfortrpt/myvaultcli/releases/latest"
         with urllib.request.urlopen(url, timeout=5) as response:
             data = json.loads(response.read())
-            return data["tag_name"].lstrip("v")  # e.g. "0.3.45"
+            body = data.get("body", "")
+            # Match version string like v0.4.5 in release body
+            match = re.search(r"version v?(\d+\.\d+\.\d+)", body, re.IGNORECASE)
+            if match:
+                return match.group(1)
+            else:
+                return None
     except Exception as e:
         return None
+
 
 def is_latest_version(current, latest):
     def normalize(v):
