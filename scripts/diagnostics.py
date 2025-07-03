@@ -8,7 +8,7 @@ import hashlib
 import urllib.request
 from datetime import datetime
 
-__version__ = "0.3.45"  # Inject this during build or tag parsing if needed
+from scripts.version import __version__ # Inject this during build or tag parsing if needed
 
 def check_env_var(var):
     value = os.environ.get(var)
