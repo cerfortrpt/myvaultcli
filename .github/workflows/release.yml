@@ -66,32 +66,32 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Homebrew Formula
-      run: |
-        FORMULA_PATH="Formula/myvault.rb"
-        LATEST_VERSION="${{ github.ref_name }}"
-        BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${LATEST_VERSION}/main"
-        SHA_URL="https://github.com/${{ github.repository }}/releases/download/${LATEST_VERSION}/main.sha256"
+        run: |
+          FORMULA_PATH="Formula/myvault.rb"
+          LATEST_VERSION="${{ github.ref_name }}"
+          BINARY_URL="https://github.com/${{ github.repository }}/releases/download/${LATEST_VERSION}/main"
+          SHA_URL="https://github.com/${{ github.repository }}/releases/download/${LATEST_VERSION}/main.sha256"
 
-        echo "Fetching SHA256 from: $SHA_URL"
-        SHA256=$(curl -sL $SHA_URL)
-        if [ -z "$SHA256" ]; then
-          echo "❌ Failed to fetch SHA256 from $SHA_URL"
-          exit 1
-        fi
-        echo "✅ Got SHA: $SHA256"
+          echo "Fetching SHA256 from: $SHA_URL"
+          SHA256=$(curl -sL $SHA_URL)
+          if [ -z "$SHA256" ]; then
+            echo "❌ Failed to fetch SHA256 from $SHA_URL"
+            exit 1
+          fi
+          echo "✅ Got SHA: $SHA256"
 
-        git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
-        cd taprepo
+          git clone https://x-access-token:${{ secrets.JERRY }}@github.com/cerfortrpt/homebrew-tools taprepo
+          cd taprepo
 
-        # Patch formula
-        sed -i '' "s|url \".*\"|url \"$BINARY_URL\"|" $FORMULA_PATH
-        sed -i '' "s|sha256 \".*\"|sha256 \"$SHA256\"|" $FORMULA_PATH
-        sed -i '' "s|version \".*\"|version \"${LATEST_VERSION}\"|" $FORMULA_PATH || echo "version \"${LATEST_VERSION}\"" >> $FORMULA_PATH
+          # Patch formula
+          sed -i '' "s|url \".*\"|url \"$BINARY_URL\"|" $FORMULA_PATH
+          sed -i '' "s|sha256 \".*\"|sha256 \"$SHA256\"|" $FORMULA_PATH
+          sed -i '' "s|version \".*\"|version \"${LATEST_VERSION}\"|" $FORMULA_PATH || echo "version \"${LATEST_VERSION}\"" >> $FORMULA_PATH
 
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git commit -am "Update to ${LATEST_VERSION}"
-        git push origin main
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Update to ${LATEST_VERSION}"
+          git push origin main
 
 
 
