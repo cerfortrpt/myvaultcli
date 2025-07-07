@@ -70,7 +70,7 @@ def main():
     enforce_self_integrity()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["diagnose","fingerprint", "rotate", "status", "clean", "version", "verify"])
+    parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version", "verify"])
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
     args = parser.parse_args()
 

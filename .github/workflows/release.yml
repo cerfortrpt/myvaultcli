@@ -5,8 +5,9 @@ on:
     tags:
       - "v*"
 
-      #potentially add signig in at some point
-      #just can't verify lacontext localauthentication import
+      #potentially add signing in at some point
+      #need to add in functionality for brew upgrade myvault
+      #has to do with homebrew tools formula file
 jobs:
   release:
     name: Build and Release

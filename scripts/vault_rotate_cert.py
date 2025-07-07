@@ -20,7 +20,7 @@ def exit_with_error(message, code=1):
     sys.exit(code)
 
 def main():
-    print("📥 Requesting a new certificate from Vault...")
+    print("Requesting a new certificate from Vault...")
 
     try:
         result = subprocess.run(
@@ -52,7 +52,7 @@ def main():
     except Exception as e:
         exit_with_error(f"Failed to write certificate files: {e}")
 
-    print("🔐 Registering certificate in Vault's cert auth backend...")
+    print("Registering certificate in Vault's cert auth backend...")
 
     try:
         subprocess.run([
