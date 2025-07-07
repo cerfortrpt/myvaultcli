@@ -11,7 +11,6 @@ from scripts.version import __version__
 BASE_DIR = getattr(sys, 'frozen', False) and sys._MEIPASS or os.path.dirname(os.path.abspath(__file__))
 
 
-
 def get_self_path():
     return sys.executable if getattr(sys, 'frozen', False) else __file__
 
@@ -26,7 +25,7 @@ def get_sha256(filepath):
 def fetch_expected_sha():
     version = __version__  # Optional: parse from your app version
     url = f"https://github.com/cerfortrpt/myvaultcli/releases/download/{version}/main.sha256"
-    print("Getting hash from url " + url)
+  #  print("Getting hash from url " + url)
 
     try:
         result = subprocess.run(
@@ -51,11 +50,9 @@ def enforce_self_integrity():
         print("Integrity check failed! The binary may have been tampered with.")
         print(f"Expected: {expected}\nActual:   {actual}")
         sys.exit(1)
-    else:
-        print("Self-integrity check passed.")
+
 
 def enforce_latest_version():
-
     try:
         result = subprocess.run(
             ["gh", "release", "view", "--repo", "cerfortrpt/myvaultcli", "--json", "tagName", "-q", ".tagName"],
@@ -92,11 +89,6 @@ def main():
 
     #enforce latest of version of cli or exit
     enforce_latest_version()
-
-
-    
-
-
 
 
     parser = argparse.ArgumentParser()
