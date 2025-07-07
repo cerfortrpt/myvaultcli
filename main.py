@@ -68,7 +68,7 @@ def enforce_latest_version():
 
     latest = "v" + str(tag.lstrip("v"))
     if latest and not latest==__version__:
-        print("Run \"brew upgrade myvault\" to install latest version:" + latest)
+        print("Run \"brew upgrade myvault\" to install latest version: " + latest)
         sys.exit(1)
       
 
@@ -91,9 +91,30 @@ def main():
     enforce_latest_version()
 
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["fingerprint", "rotate", "status", "clean", "version", "verify"])
+    parser = argparse.ArgumentParser(prog="myvault")
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
+
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # fingerprint
+    subparsers.add_parser("fingerprint", help="Authenticate to Vault using fingerprint")
+
+    # rotate
+    subparsers.add_parser("rotate", help="Rotate Vault client certificates")
+
+    # status
+    subparsers.add_parser("status", help="Show Vault certificate status")
+
+    # clean
+    subparsers.add_parser("clean", help="Remove local certificates and tokens")
+
+    # version
+    subparsers.add_parser("version", help="Show CLI version")
+
+    # verify
+    subparsers.add_parser("verify", help="Verify CLI binary and config integrity")
+
+
     args = parser.parse_args()
 
 
@@ -107,11 +128,8 @@ def main():
         import_script("status").main()
     elif args.command == "version":
         print(f"myvault CLI version {__version__}")
-    
     elif args.command == "verify":
         enforce_self_integrity()
-    elif args.command == "diagnose":
-        import_script("diagnostics").main()
     
 if __name__ == "__main__":
     main()
