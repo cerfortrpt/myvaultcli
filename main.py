@@ -52,24 +52,7 @@ def enforce_self_integrity():
         sys.exit(1)
 
 
-def enforce_latest_version():
-    try:
-        result = subprocess.run(
-            ["gh", "release", "view", "--repo", "cerfortrpt/myvaultcli", "--json", "tagName", "-q", ".tagName"],
-            capture_output=True,
-            check=True,
-            text=True
-        )
-        tag = result.stdout.strip()
-    except Exception as e:
-        print(f"Failed to fetch latest version via GitHub CLI: {e}")
-        sys.exit(1)
 
-
-    latest = "v" + str(tag.lstrip("v"))
-    if latest and not latest==__version__:
-        print("Run \"brew upgrade myvault\" to install latest version: " + latest)
-        sys.exit(1)
       
 
 
@@ -86,10 +69,6 @@ def main():
 #integrity check: compare expected hash with hash at runtime
 #force cli to not except commands if failed
     enforce_self_integrity()
-
-    #enforce latest of version of cli or exit
-    enforce_latest_version()
-
 
     parser = argparse.ArgumentParser(prog="myvault")
     parser.add_argument("--version", action="version", version=f"myvault {__version__}")
