@@ -71,7 +71,20 @@ def main():
         keyring.set_password("vault_cert_auth", "key", key)
     except Exception as e:
         exit_with_error(f"Failed to store credentials in Keychain: {e}")
+    
 
+
+    subprocess.run([
+            "rm", "vault-ca.crt"
+        ], check=True)
+    
+    subprocess.run([
+            "rm", "user.crt"
+        ], check=True)
+    
+    subprocess.run([
+            "rm", "user.key"
+        ], check=True)
     print("Certificate successfully stored and registered.")
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@ def authenticate_with_fingerprint():
         exit_with_error("Fingerprint authentication failed.")
 
 def get_vault_token_from_keychain():
-    print("🔎 Retrieving cert + key from macOS Keychain...")
+    print("Retrieving cert + key from macOS Keychain...")
     try:
         cert = keyring.get_password("vault_cert_auth", "cert")
         key = keyring.get_password("vault_cert_auth", "key")
@@ -74,7 +74,7 @@ def vault_token_login(cert, key):
             key_file.write(key)
             key_path = key_file.name
 
-        print("🔑 Logging in to Vault using certificate...")
+        print("Logging in to Vault using certificate...")
 
         login_result = subprocess.run([
             "vault", "login", "-method=cert",
